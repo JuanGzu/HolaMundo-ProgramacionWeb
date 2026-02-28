@@ -22,8 +22,15 @@ function App() {
           count is {count}
         </button>
         <p>
-          Edit <code>        <h1>Hola Mundo desde AWS 🚀</h1>
-                  </code> and save to test HMR
+          Edit <code>        
+            <h1>Hola Mundo desde AWS 🚀</h1>
+            <h1>Coso 123</h1>
+            
+            
+            
+            
+            
+           </code> and save to test HMR
         </p>
       </div>
       <p className="read-the-docs">
