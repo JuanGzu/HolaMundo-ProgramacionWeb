@@ -1,36 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+
+const API = import.meta.env.VITE_API_URL;
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tasks, setTasks] = useState([]);
+  const [text, setText] = useState("");
+
+  const loadTasks = async () => {
+    const res = await fetch(`${API}/tasks`);
+    const data = await res.json();
+    setTasks(data);
+  };
+
+  const addTask = async () => {
+    if (!text) return;
+
+    await fetch(`${API}/tasks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ task: text }),
+    });
+
+    setText("");
+    loadTasks();
+  };
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          Contador de clicks: {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-              <h1>Coso 123 JuanGzu</h1>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ padding: "20px" }}>
+      <h1>Lista de tareas</h1>
+
+      <input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <button onClick={addTask}>Agregar</button>
+
+      <ul>
+        {tasks.map((t) => (
+          <li key={t.id}>{t.task}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
-export default App
+export default App;
